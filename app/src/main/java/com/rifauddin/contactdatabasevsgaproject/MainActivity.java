@@ -1,6 +1,8 @@
 package com.rifauddin.contactdatabasevsgaproject;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -46,9 +48,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    //https://github.com/rifauddint/SQLiteAppVSGA
+    //https://github.com/rifauddint/SQLiteContactAppsVSGA
+       listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+           public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+               Map<String, Object> mapObject =
+                       (Map<String, Object>)
+                               parent.getAdapter().getItem(position);
+
+               int idData =  (int) mapObject.get("id");
+               konfirmasiHapus(idData);
+               return true;
+
+
+           }
+       });
+
     }
 
+
+    void konfirmasiHapus(final int idData){
+        new AlertDialog.Builder(this)
+                .setTitle("Hapus Data ini?")
+                .setMessage("Apakah Anda yakin ingin menghapus data ini?")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton("Hapus",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,
+                                                int whichButton) {
+                                db.delete(idData);
+                                loadData("");
+                            }
+                        })
+                .setNegativeButton("Jangan", null)
+                .show();
+
+
+    }
+
+
     //https://github.com/rifauddint/SQLiteAppVSGA
+    //https://github.com/rifauddint/SQLiteContactAppsVSGA
 
     @Override
     protected void onResume() {
